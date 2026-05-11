@@ -12,7 +12,8 @@ Each project lives in its own folder with its own README.
 | Folder | Description |
 |--------|-------------|
 | [`landing/`](./landing) | Public front door — [erbsultan.uz](https://erbsultan.uz) on a hardened Ubuntu VPS |
+| [`observability/`](./observability) | Monitoring and logs for the homelab — Prometheus, Grafana, Loki |
 
 ## Stack
 
-Docker, Linux, Nginx, Let's Encrypt, GitHub Actions — added as projects appear.
+Docker, Linux, Nginx, Let's Encrypt, GitHub Actions, Prometheus, Grafana, Loki — added as projects appear.

@@ -12,7 +12,8 @@
 | Папка | Описание |
 |-------|----------|
 | [`landing/`](./landing) | Парадный вход — [erbsultan.uz](https://erbsultan.uz) на захардненной Ubuntu VPS |
+| [`observability/`](./observability) | Мониторинг и логи homelab — Prometheus, Grafana, Loki |
 
 ## Стек
 
-Docker, Linux, Nginx, Let's Encrypt, GitHub Actions — добавляется по мере появления проектов.
+Docker, Linux, Nginx, Let's Encrypt, GitHub Actions, Prometheus, Grafana, Loki — добавляется по мере появления проектов.
