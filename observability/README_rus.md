@@ -44,6 +44,17 @@ flowchart TD
 - ✅ В Grafana Explore запрос `{job="nginx"}` возвращает nginx-логи
 - ✅ Prometheus, Loki и Alloy UI не торчат наружу
 
+## Скриншоты
+
+<p>
+  <img src="docs/img/01-grafana-node-exporter-dashboard.png" alt="Grafana Node Exporter dashboard" width="49%">
+  <img src="docs/img/02-grafana-loki-nginx-logs.png" alt="Grafana Explore с nginx-логами из Loki" width="49%">
+</p>
+
+<p>
+  <sub>Слева: живые VPS-метрики из node_exporter. Справа: nginx-логи через Alloy в Loki.</sub>
+</p>
+
 ## Компоненты
 
 | Компонент | Зачем нужен | Адрес |

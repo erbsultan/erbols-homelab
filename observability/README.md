@@ -44,6 +44,17 @@ flowchart TD
 - ✅ Grafana Explore returns nginx logs with `{job="nginx"}`
 - ✅ Prometheus, Loki, and Alloy UI stay private on localhost
 
+## Screenshots
+
+<p>
+  <img src="docs/img/01-grafana-node-exporter-dashboard.png" alt="Grafana Node Exporter dashboard" width="49%">
+  <img src="docs/img/02-grafana-loki-nginx-logs.png" alt="Grafana Explore with nginx logs from Loki" width="49%">
+</p>
+
+<p>
+  <sub>Left: live VPS metrics from node_exporter. Right: nginx logs flowing through Alloy into Loki.</sub>
+</p>
+
 ## Components
 
 | Component | Purpose | Address |
