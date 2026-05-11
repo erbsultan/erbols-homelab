@@ -11,8 +11,8 @@ Each project lives in its own folder with its own README.
 
 | Folder | Description |
 |--------|-------------|
-| _coming soon_ | — |
+| [`landing/`](./landing) | Public front door — [erbsultan.uz](https://erbsultan.uz) on a hardened Ubuntu VPS |
 
 ## Stack
 
-Docker, Linux, Ansible, Terraform, CI/CD — added as projects appear.
+Docker, Linux, Nginx, Let's Encrypt, GitHub Actions — added as projects appear.

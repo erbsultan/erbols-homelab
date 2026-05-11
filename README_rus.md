@@ -11,8 +11,8 @@
 
 | Папка | Описание |
 |-------|----------|
-| _скоро_ | — |
+| [`landing/`](./landing) | Парадный вход — [erbsultan.uz](https://erbsultan.uz) на захардненной Ubuntu VPS |
 
 ## Стек
 
-Docker, Linux, Ansible, Terraform, CI/CD — добавляется по мере появления проектов.
+Docker, Linux, Nginx, Let's Encrypt, GitHub Actions — добавляется по мере появления проектов.
