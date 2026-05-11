@@ -1,115 +1,134 @@
 # observability
 
-Мониторинг и сбор логов для homelab.
+✨ Мониторинг и сбор логов для homelab.
 
-Начинаем маленько:
+Этот проект наблюдает за Vultr VPS, на котором работает
+[`erbsultan.uz`](https://erbsultan.uz), и даёт один публичный интерфейс:
+[`grafana.erbsultan.uz`](https://grafana.erbsultan.uz).
 
-- Grafana как единственный публичный интерфейс на `grafana.erbsultan.uz`
-- Prometheus для метрик
-- Loki для логов
-- node_exporter для системных метрик VPS
-- Alloy или Promtail для сбора nginx-логов
+> English version: [README.md](./README.md)
 
-DNS находится в eskiz.uz. Сервер работает в Vultr Cloud, регион Germany,
-Frankfurt.
+## Статус
 
-## Цель
+| Слой | Инструмент | Состояние |
+|------|------------|-----------|
+| 📊 UI метрик | Grafana | ✅ Живёт на `https://grafana.erbsultan.uz` |
+| 📈 Хранилище метрик | Prometheus | ✅ Приватно на `127.0.0.1:9090` |
+| 🖥️ Метрики VPS | node_exporter | ✅ Scrape через Prometheus |
+| 🪵 Хранилище логов | Loki | ✅ Приватно на `127.0.0.1:3100` |
+| 🚚 Доставка логов | Alloy | ✅ Читает nginx-логи |
+| 🔐 Публичный доступ | nginx + Let's Encrypt | ✅ HTTPS включён |
 
-Первый milestone — увидеть состояние текущего VPS и nginx-сервиса из
-`landing/` в Grafana.
+## Архитектура
 
-## Граница проекта
+```mermaid
+flowchart TD
+    browser["Browser"] -->|HTTPS| nginx["nginx<br/>grafana.erbsultan.uz"]
+    nginx --> grafana["Grafana<br/>public UI"]
 
-Этот проект лежит рядом с `landing/`, а не внутри него, потому что это
-общий инфраструктурный слой для всего homelab.
+    node["VPS system<br/>CPU, RAM, disk, network"] --> exporter["node_exporter"]
+    exporter --> prometheus["Prometheus<br/>private"]
+    prometheus --> grafana
 
-`landing/` — один сервис. `observability/` наблюдает за инфраструктурой,
-на которой позже может жить много сервисов.
+    logs["nginx logs<br/>/var/log/nginx/*.log"] --> alloy["Alloy"]
+    alloy --> loki["Loki<br/>private"]
+    loki --> grafana
+```
 
-## Первые шаги
+## Что Уже Работает
 
-1. Создать DNS-запись `grafana.erbsultan.uz` в eskiz.uz. Готово:
-   `A grafana.erbsultan.uz -> 108.61.211.82`, TTL 3600.
-   Проверено локально через `dig +short grafana.erbsultan.uz A`.
-2. Проверить текущий baseline VPS. Готово:
-   `hostname` — `homelab-fra-01`, Docker-контейнеров нет, `nginx -t`
-   проходит успешно.
-3. Создать рабочую папку на сервере. Готово:
-   `/opt/erbols-homelab/observability` существует и принадлежит
-   `erbol:erbol`.
-4. Проверить Docker на VPS. Готово:
-   Docker `29.4.3`, Docker Compose `v5.1.3`.
-5. Создать remote `.env` для логина и пароля Grafana. Готово:
-   `/opt/erbols-homelab/observability/.env` существует с правами
-   `0600` и не коммитится в Git.
-   Grafana ожидает `GF_SECURITY_ADMIN_USER` и
-   `GF_SECURITY_ADMIN_PASSWORD`; первый запуск сначала использовал
-   дефолтные `admin/admin`, после чего UI заставил сменить пароль.
-6. Добавить первый Docker Compose service для Grafana. Готово:
-   `docker compose config` проходит успешно. Grafana привязана к
-   `127.0.0.1:3000`, поэтому напрямую в интернет не торчит.
-   Используем официальный OSS image repository `grafana/grafana`; Docker
-   сам скачает его при первом запуске.
-7. Запустить Grafana. Готово:
-   контейнер `observability-grafana` работает из
-   `grafana/grafana:12.2.1` на `127.0.0.1:3000`.
-8. Проверить Grafana локально с VPS. Готово:
-   `curl -I http://127.0.0.1:3000` возвращает `302 Found` на `/login`.
-9. Добавить nginx HTTP reverse proxy для `grafana.erbsultan.uz`. Готово:
-   `nginx -t` проходит успешно перед reload.
-10. Перезагрузить nginx и проверить HTTP reverse proxy. Готово:
-   `curl -I http://grafana.erbsultan.uz` возвращает `302 Found` на
-   `/login`.
-11. Добавить HTTPS через certbot. Готово:
-    Let's Encrypt certificate выпущен для `grafana.erbsultan.uz`.
-    `curl -I https://grafana.erbsultan.uz` возвращает `302 Found` на
-    `/login`.
-12. Зайти в Grafana по HTTPS. Готово:
-    `https://grafana.erbsultan.uz` открывает Grafana home screen после
-    первичной смены admin-пароля.
-13. Добавить Prometheus config file. Готово:
-    `/opt/erbols-homelab/observability/prometheus/prometheus.yml`
-    существует на VPS.
-14. Добавить services Prometheus и node_exporter. Готово:
-    `docker compose config` проходит успешно. Prometheus привязан к
-    `127.0.0.1:9090`, поэтому напрямую в интернет не торчит.
-15. Запустить Prometheus и node_exporter. Готово:
-    контейнеры `observability-prometheus` и
-    `observability-node-exporter` работают. Prometheus опубликован на
-    `127.0.0.1:9090`; node_exporter доступен только внутри Docker
-    network.
-16. Проверить здоровье Prometheus и node_exporter. Готово:
-    Prometheus readiness возвращает `Prometheus Server is Ready.`;
-    node_exporter отдаёт метрики внутри Docker network.
-17. Проверить Prometheus scrape targets. Готово:
-    Prometheus видит оба job здоровыми: `prometheus` — `up`, и `node`
-    — `up` на `http://node_exporter:9100/metrics`.
-18. Добавить Prometheus как Grafana data source. Готово:
-    Grafana успешно опрашивает Prometheus на `http://prometheus:9090`.
-19. Импортировать node_exporter dashboard. Готово:
-    Grafana dashboard `Node Exporter Full` импортирован по dashboard ID
-    `1860` и показывает CPU, memory, disk, network и uptime метрики VPS.
-20. Добавить Loki config file. Готово:
-    `/opt/erbols-homelab/observability/loki/loki-config.yaml`
-    существует на VPS.
-21. Добавить Alloy config file для nginx-логов. Готово:
-    `/opt/erbols-homelab/observability/alloy/config.alloy` существует на
-    VPS. Он читает `/var/log/nginx/*.log` и отправляет entries в Loki.
-22. Добавить services Loki и Alloy. Готово:
-    `docker compose config` проходит успешно. Loki привязан к
-    `127.0.0.1:3100`; Alloy UI привязан к `127.0.0.1:12345`.
-23. Запустить Loki и Alloy. Готово:
-    контейнеры `observability-loki` и `observability-alloy` работают.
-    Loki опубликован на `127.0.0.1:3100`; Alloy UI опубликован на
-    `127.0.0.1:12345`.
-24. Проверить здоровье Loki и Alloy. Готово:
-    Loki возвращает `ready`; Alloy UI возвращает `200 OK`; Alloy читает
-    nginx access и error logs из `/var/log/nginx/*.log`.
-25. Добавить Loki как Grafana data source. Готово:
-    Grafana успешно подключается к Loki на `http://loki:3100`.
-26. Запросить nginx-логи в Grafana Explore. Готово:
-    `{job="nginx"}` возвращает nginx access logs с labels
-    `instance=homelab-fra-01`, `job=nginx` и `service=nginx`.
-27. Оставить Prometheus и Loki приватными. Готово:
-    Prometheus, Loki и Alloy UI привязаны только к `127.0.0.1`; Grafana
-    — единственный публичный observability UI.
+- ✅ Grafana открывается по HTTPS на `grafana.erbsultan.uz`
+- ✅ Prometheus собирает метрики с себя и `node_exporter`
+- ✅ Импортирован dashboard `Node Exporter Full` по ID `1860`
+- ✅ Loki подключён как Grafana data source
+- ✅ В Grafana Explore запрос `{job="nginx"}` возвращает nginx-логи
+- ✅ Prometheus, Loki и Alloy UI не торчат наружу
+
+## Компоненты
+
+| Компонент | Зачем нужен | Адрес |
+|-----------|-------------|-------|
+| Grafana | Dashboards и Explore UI | `https://grafana.erbsultan.uz` |
+| Prometheus | Хранит и отдаёт метрики | `http://127.0.0.1:9090` |
+| node_exporter | Системные метрики VPS | Только Docker network |
+| Loki | Хранит логи и отвечает на LogQL | `http://127.0.0.1:3100` |
+| Alloy | Читает nginx-логи и отправляет их в Loki | `http://127.0.0.1:12345` |
+
+## Полезные Проверки
+
+```bash
+docker ps
+curl http://127.0.0.1:9090/-/ready
+curl http://127.0.0.1:3100/ready
+curl -I http://127.0.0.1:12345
+```
+
+Prometheus targets:
+
+```bash
+curl -s http://127.0.0.1:9090/api/v1/targets \
+  | jq '.data.activeTargets[] | {job: .labels.job, health: .health, scrapeUrl: .scrapeUrl}'
+```
+
+Loki query в Grafana Explore:
+
+```logql
+{job="nginx"}
+```
+
+## Файлы
+
+```text
+observability/
+├── compose.yml                       # Grafana, Prometheus, node_exporter, Loki, Alloy
+├── .env.example                      # пример Grafana admin variables
+├── prometheus/
+│   └── prometheus.yml                # scrape config
+├── loki/
+│   └── loki-config.yaml              # single-node Loki config
+├── alloy/
+│   └── config.alloy                  # сбор nginx-логов
+└── nginx/
+    └── grafana.erbsultan.uz.conf     # reverse proxy до правок certbot
+```
+
+Настоящий `.env` лежит только на VPS:
+
+```text
+/opt/erbols-homelab/observability/.env
+```
+
+Он специально не коммитится.
+
+## Безопасность
+
+Grafana — единственная публичная точка входа в observability. Всё остальное
+привязано к localhost или живёт только внутри Docker network.
+
+| Service | Публичный? | Почему |
+|---------|------------|--------|
+| Grafana | ✅ Да | Интерфейс для человека |
+| Prometheus | ❌ Нет | Внутренний metrics API |
+| Loki | ❌ Нет | Внутренний logs API |
+| Alloy UI | ❌ Нет | Только локальная отладка |
+| node_exporter | ❌ Нет | Только scrape target |
+
+## Журнал Сборки
+
+| Шаг | Результат |
+|-----|-----------|
+| DNS | ✅ `grafana.erbsultan.uz -> 108.61.211.82` |
+| VPS baseline | ✅ `homelab-fra-01`, nginx OK, Docker ready |
+| Grafana | ✅ container работает за nginx + HTTPS |
+| Prometheus | ✅ targets `prometheus` и `node` в состоянии `up` |
+| Dashboard | ✅ `Node Exporter Full` импортирован |
+| Loki | ✅ возвращает `ready` |
+| Alloy | ✅ читает `/var/log/nginx/*.log` |
+| Logs | ✅ `{job="nginx"}` возвращает nginx entries |
+
+## Дальше
+
+- 🚨 Добавить Grafana alerts для диска, load average и down-сервисов
+- 📬 Отправлять alerts в Telegram или email
+- 🧭 Сделать отдельный dashboard по nginx access logs
+- 🔐 Позже: спрятать Grafana за OpenVPN, когда появится VPN-проект
