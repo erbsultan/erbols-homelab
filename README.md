@@ -17,3 +17,4 @@ Each project lives in its own folder with its own README.
 ## Stack
 
 Docker, Linux, Nginx, Let's Encrypt, GitHub Actions, Prometheus, Grafana, Loki — added as projects appear.
+
