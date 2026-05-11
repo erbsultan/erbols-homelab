@@ -1,5 +1,7 @@
 # landing — erbsultan.uz
 
+[![deploy landing](https://github.com/erbsultan/erbols-homelab/actions/workflows/deploy-landing.yml/badge.svg?branch=main)](https://github.com/erbsultan/erbols-homelab/actions/workflows/deploy-landing.yml)
+
 ![](docs/img/00-hero.png)
 
 Парадный вход homelab. Статичная страница на захардненной Ubuntu 24.04
