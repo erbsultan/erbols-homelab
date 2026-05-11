@@ -51,7 +51,7 @@
   }
 
   var lastSpawn = 0;
-  var nextInterval = 4000 + Math.random() * 4000;   // 4–8 seconds
+  var nextInterval = 4000 + Math.random() * 2000;   // 4–6 seconds
   var lastFrame = 0;
 
   function tick(now) {
@@ -69,7 +69,7 @@
     if (now - lastSpawn > nextInterval) {
       spawnShooting();
       lastSpawn = now;
-      nextInterval = 4000 + Math.random() * 4000;
+      nextInterval = 4000 + Math.random() * 2000;
     }
 
     ctx.clearRect(0, 0, W, H);
