@@ -66,5 +66,28 @@ that can later host many services.
 12. Log in to Grafana over HTTPS. Done:
     `https://grafana.erbsultan.uz` opens the Grafana home screen after
     the initial admin password change.
-13. Add Prometheus, Loki, and exporters.
-14. Keep Prometheus and Loki private.
+13. Add the Prometheus config file. Done:
+    `/opt/erbols-homelab/observability/prometheus/prometheus.yml`
+    exists on the VPS.
+14. Add Prometheus and node_exporter services. Done:
+    `docker compose config` validates successfully. Prometheus is bound
+    to `127.0.0.1:9090`, so it is not exposed directly to the internet.
+15. Start Prometheus and node_exporter. Done:
+    containers `observability-prometheus` and
+    `observability-node-exporter` are running. Prometheus is published on
+    `127.0.0.1:9090`; node_exporter is only exposed inside the Docker
+    network.
+16. Check Prometheus and node_exporter health. Done:
+    Prometheus readiness returns `Prometheus Server is Ready.`;
+    node_exporter returns metrics from inside the Docker network.
+17. Check Prometheus scrape targets. Done:
+    Prometheus reports both jobs as healthy: `prometheus` is `up`, and
+    `node` is `up` at `http://node_exporter:9100/metrics`.
+18. Add Prometheus as a Grafana data source. Done:
+    Grafana successfully queries Prometheus at `http://prometheus:9090`.
+19. Import a node_exporter dashboard. Done:
+    Grafana dashboard `Node Exporter Full` is imported from dashboard
+    ID `1860` and shows VPS CPU, memory, disk, network, and uptime
+    metrics.
+20. Add Loki and log collection.
+21. Keep Prometheus and Loki private.

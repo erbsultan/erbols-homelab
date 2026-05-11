@@ -67,5 +67,27 @@ Frankfurt.
 12. Зайти в Grafana по HTTPS. Готово:
     `https://grafana.erbsultan.uz` открывает Grafana home screen после
     первичной смены admin-пароля.
-13. Добавить Prometheus, Loki и exporters.
-14. Оставить Prometheus и Loki приватными.
+13. Добавить Prometheus config file. Готово:
+    `/opt/erbols-homelab/observability/prometheus/prometheus.yml`
+    существует на VPS.
+14. Добавить services Prometheus и node_exporter. Готово:
+    `docker compose config` проходит успешно. Prometheus привязан к
+    `127.0.0.1:9090`, поэтому напрямую в интернет не торчит.
+15. Запустить Prometheus и node_exporter. Готово:
+    контейнеры `observability-prometheus` и
+    `observability-node-exporter` работают. Prometheus опубликован на
+    `127.0.0.1:9090`; node_exporter доступен только внутри Docker
+    network.
+16. Проверить здоровье Prometheus и node_exporter. Готово:
+    Prometheus readiness возвращает `Prometheus Server is Ready.`;
+    node_exporter отдаёт метрики внутри Docker network.
+17. Проверить Prometheus scrape targets. Готово:
+    Prometheus видит оба job здоровыми: `prometheus` — `up`, и `node`
+    — `up` на `http://node_exporter:9100/metrics`.
+18. Добавить Prometheus как Grafana data source. Готово:
+    Grafana успешно опрашивает Prometheus на `http://prometheus:9090`.
+19. Импортировать node_exporter dashboard. Готово:
+    Grafana dashboard `Node Exporter Full` импортирован по dashboard ID
+    `1860` и показывает CPU, memory, disk, network и uptime метрики VPS.
+20. Добавить Loki и сбор логов.
+21. Оставить Prometheus и Loki приватными.
