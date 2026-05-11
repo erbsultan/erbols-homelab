@@ -89,5 +89,27 @@ Frankfurt.
 19. Импортировать node_exporter dashboard. Готово:
     Grafana dashboard `Node Exporter Full` импортирован по dashboard ID
     `1860` и показывает CPU, memory, disk, network и uptime метрики VPS.
-20. Добавить Loki и сбор логов.
-21. Оставить Prometheus и Loki приватными.
+20. Добавить Loki config file. Готово:
+    `/opt/erbols-homelab/observability/loki/loki-config.yaml`
+    существует на VPS.
+21. Добавить Alloy config file для nginx-логов. Готово:
+    `/opt/erbols-homelab/observability/alloy/config.alloy` существует на
+    VPS. Он читает `/var/log/nginx/*.log` и отправляет entries в Loki.
+22. Добавить services Loki и Alloy. Готово:
+    `docker compose config` проходит успешно. Loki привязан к
+    `127.0.0.1:3100`; Alloy UI привязан к `127.0.0.1:12345`.
+23. Запустить Loki и Alloy. Готово:
+    контейнеры `observability-loki` и `observability-alloy` работают.
+    Loki опубликован на `127.0.0.1:3100`; Alloy UI опубликован на
+    `127.0.0.1:12345`.
+24. Проверить здоровье Loki и Alloy. Готово:
+    Loki возвращает `ready`; Alloy UI возвращает `200 OK`; Alloy читает
+    nginx access и error logs из `/var/log/nginx/*.log`.
+25. Добавить Loki как Grafana data source. Готово:
+    Grafana успешно подключается к Loki на `http://loki:3100`.
+26. Запросить nginx-логи в Grafana Explore. Готово:
+    `{job="nginx"}` возвращает nginx access logs с labels
+    `instance=homelab-fra-01`, `job=nginx` и `service=nginx`.
+27. Оставить Prometheus и Loki приватными. Готово:
+    Prometheus, Loki и Alloy UI привязаны только к `127.0.0.1`; Grafana
+    — единственный публичный observability UI.

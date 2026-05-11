@@ -37,6 +37,39 @@ services:
     volumes:
       - /:/host:ro,rslave
 
+  loki:
+    image: grafana/loki:3.7.0
+    container_name: observability-loki
+    restart: unless-stopped
+    command:
+      - -config.file=/etc/loki/loki-config.yaml
+    ports:
+      - "127.0.0.1:3100:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - loki-data:/loki
+
+  alloy:
+    image: grafana/alloy:v1.16.1
+    container_name: observability-alloy
+    restart: unless-stopped
+    user: "0:0"
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    ports:
+      - "127.0.0.1:12345:12345"
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/log/nginx:/var/log/nginx:ro
+      - alloy-data:/var/lib/alloy/data
+    depends_on:
+      - loki
+
 volumes:
   grafana-data:
   prometheus-data:
+  loki-data:
+  alloy-data:

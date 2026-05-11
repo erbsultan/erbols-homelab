@@ -89,5 +89,27 @@ that can later host many services.
     Grafana dashboard `Node Exporter Full` is imported from dashboard
     ID `1860` and shows VPS CPU, memory, disk, network, and uptime
     metrics.
-20. Add Loki and log collection.
-21. Keep Prometheus and Loki private.
+20. Add the Loki config file. Done:
+    `/opt/erbols-homelab/observability/loki/loki-config.yaml` exists on
+    the VPS.
+21. Add the Alloy config file for nginx logs. Done:
+    `/opt/erbols-homelab/observability/alloy/config.alloy` exists on the
+    VPS. It tails `/var/log/nginx/*.log` and forwards entries to Loki.
+22. Add Loki and Alloy services. Done:
+    `docker compose config` validates successfully. Loki is bound to
+    `127.0.0.1:3100`; Alloy UI is bound to `127.0.0.1:12345`.
+23. Start Loki and Alloy. Done:
+    containers `observability-loki` and `observability-alloy` are
+    running. Loki is published on `127.0.0.1:3100`; Alloy UI is published
+    on `127.0.0.1:12345`.
+24. Check Loki and Alloy health. Done:
+    Loki returns `ready`; Alloy UI returns `200 OK`; Alloy is tailing
+    nginx access and error logs from `/var/log/nginx/*.log`.
+25. Add Loki as a Grafana data source. Done:
+    Grafana successfully connects to Loki at `http://loki:3100`.
+26. Query nginx logs in Grafana Explore. Done:
+    `{job="nginx"}` returns nginx access logs with labels
+    `instance=homelab-fra-01`, `job=nginx`, and `service=nginx`.
+27. Keep Prometheus and Loki private. Done:
+    Prometheus, Loki, and Alloy UI are only bound to `127.0.0.1`; Grafana
+    is the only public observability UI.
