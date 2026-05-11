@@ -6,8 +6,17 @@
 живёт на захардненной Ubuntu VPS и открывается на
 [`erbsultan.uz`](https://erbsultan.uz).
 
+Сейчас это уже не пустая заглушка, а лёгкая DevOps-профильная страница:
+EN/RU, переключатель темы, звёздный фон в dark mode, фото, проекты и
+контакты. Первая версия была нарочно минимальной; live-сайт уже вырос в
+персональную homepage на `erbsultan.uz`.
+
 <p>
-  <img src="docs/img/00-hero.png" alt="erbsultan.uz landing page" width="100%">
+  <img src="docs/img/00-hero.png" alt="early erbsultan.uz landing page screenshot" width="62%">
+</p>
+
+<p>
+  <sub>Ранний скриншот первого деплоя. Live-страница теперь выглядит как персональный профиль, описанный выше.</sub>
 </p>
 
 > English version: [README.md](./README.md) · Воспроизвести с нуля: [PROVISION_rus.md](./PROVISION_rus.md)
@@ -16,7 +25,8 @@
 
 | Слой | Инструмент | Состояние |
 |------|------------|-----------|
-| 🌐 Сайт | Static HTML/CSS/JS | ✅ Живёт на `https://erbsultan.uz` |
+| 🌐 Сайт | Static HTML/CSS/JS | ✅ Personal DevOps profile на `https://erbsultan.uz` |
+| 🌓 UI | EN/RU, theme toggle, starfield | ✅ Текущая live-версия |
 | 🔐 TLS | Let's Encrypt | ✅ HTTPS включён, auto-renew через systemd |
 | 🧱 Web server | nginx | ✅ Статика + редирект HTTP на HTTPS |
 | 🛡️ Hardening | ufw, fail2ban, SSH only by key | ✅ root SSH и password auth отключены |

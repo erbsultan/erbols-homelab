@@ -6,8 +6,17 @@
 served from a hardened Ubuntu VPS at
 [`erbsultan.uz`](https://erbsultan.uz).
 
+Today the page is a lightweight DevOps profile: EN/RU copy, theme toggle,
+dark-mode starfield, profile photo, project links, and contact links.
+The first version was intentionally blank; the live site has since grown
+into the personal homepage shown at `erbsultan.uz`.
+
 <p>
-  <img src="docs/img/00-hero.png" alt="erbsultan.uz landing page" width="100%">
+  <img src="docs/img/00-hero.png" alt="early erbsultan.uz landing page screenshot" width="62%">
+</p>
+
+<p>
+  <sub>Early screenshot from the first deploy. The live page now has the personal profile UI described above.</sub>
 </p>
 
 > Russian version: [README_rus.md](./README_rus.md) · Reproduce it from scratch: [PROVISION.md](./PROVISION.md)
@@ -16,7 +25,8 @@ served from a hardened Ubuntu VPS at
 
 | Layer | Tool | State |
 |-------|------|-------|
-| 🌐 Site | Static HTML/CSS/JS | ✅ Live at `https://erbsultan.uz` |
+| 🌐 Site | Static HTML/CSS/JS | ✅ Personal DevOps profile live at `https://erbsultan.uz` |
+| 🌓 UI | EN/RU, theme toggle, starfield | ✅ Current live version |
 | 🔐 TLS | Let's Encrypt | ✅ HTTPS enabled, auto-renew via systemd |
 | 🧱 Web server | nginx | ✅ Static host + HTTP to HTTPS redirect |
 | 🛡️ Hardening | ufw, fail2ban, key-only SSH | ✅ Root SSH and password auth disabled |
