@@ -12,20 +12,44 @@
   <meta property="og:type" content="profile">
   <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
 </head>
 <body>
 
-<nav>
-  <span class="active">EN</span>
-  <span class="sep">|</span>
-  <a href="/ru.html">RU</a>
-</nav>
+<div class="topbar">
+  <div class="theme-toggle" role="group" aria-label="Theme">
+    <button class="theme-btn" data-theme="light" aria-label="Light theme" title="Light">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="system" aria-label="System theme" title="System">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <path d="M8 21h8M12 17v4"/>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="dark" aria-label="Dark theme" title="Dark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="lang">
+    <span class="active">EN</span>
+    <span class="sep">|</span>
+    <a href="/ru.html">RU</a>
+  </div>
+</div>
 
 <header>
   <img src="/me.jpg" alt="Erbol Sultanbayev">
-  <div>
+  <div class="identity">
     <h1>Erbol Sultanbayev</h1>
     <p class="tagline">DevOps engineer in training · Tashkent, Uzbekistan</p>
+    <span class="status">open to work</span>
   </div>
 </header>
 
@@ -55,12 +79,12 @@
 
 <section>
   <h2>Contact</h2>
-  <ul class="contacts">
-    <li><span>github</span><a href="https://github.com/erbsultan">erbsultan</a></li>
-    <li><span>linkedin</span><a href="https://www.linkedin.com/in/erbol-sultanbayev/">erbol-sultanbayev</a></li>
-    <li><span>telegram</span><a href="https://t.me/erbol_sultanbayev">@erbol_sultanbayev</a></li>
-    <li><span>email</span><a href="mailto:m.erbol.sultanbayev@gmail.com">m.erbol.sultanbayev@gmail.com</a></li>
-  </ul>
+  <dl class="contacts">
+    <dt>github</dt>     <dd><a href="https://github.com/erbsultan">erbsultan</a></dd>
+    <dt>linkedin</dt>   <dd><a href="https://www.linkedin.com/in/erbol-sultanbayev/">erbol-sultanbayev</a></dd>
+    <dt>telegram</dt>   <dd><a href="https://t.me/erbol_sultanbayev">@erbol_sultanbayev</a></dd>
+    <dt>email</dt>      <dd><a href="mailto:m.erbol.sultanbayev@gmail.com">m.erbol.sultanbayev@gmail.com</a></dd>
+  </dl>
 </section>
 
 <footer>
