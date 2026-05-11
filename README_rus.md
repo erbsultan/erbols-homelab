@@ -1,19 +1,89 @@
 # erbols-homelab
 
-Монорепозиторий с моими homelab-проектами. Здесь я экспериментирую
-с DevOps-практиками, инфраструктурой и self-hosted сервисами.
+✨ Растущий homelab-монорепозиторий, где я строю реальные DevOps-проекты,
+а не только смотрю курсы.
 
-Каждый проект живёт в своей папке со своим README.
+Сейчас здесь уже есть публичный personal site, hardened VPS, автоматический
+деплой, метрики и сбор логов.
 
 > English version: [README.md](./README.md)
 
+## Статус
+
+| Область | Состояние |
+|---------|-----------|
+| 🌐 Публичный сайт | ✅ [`erbsultan.uz`](https://erbsultan.uz) |
+| 📊 Observability UI | ✅ [`grafana.erbsultan.uz`](https://grafana.erbsultan.uz) |
+| 🛡️ VPS hardening | ✅ key-only SSH, `ufw`, `fail2ban`, unattended upgrades |
+| 🚀 Deploy | ✅ GitHub Actions + `rsync` |
+| 📈 Метрики | ✅ Prometheus + node_exporter |
+| 🪵 Логи | ✅ Loki + Alloy собирают nginx-логи |
+
+## Карта
+
+```mermaid
+flowchart TD
+    repo["erbols-homelab"] --> landing["landing<br/>public site"]
+    repo --> obs["observability<br/>metrics + logs"]
+
+    landing --> site["erbsultan.uz"]
+    landing --> nginx["nginx + Let's Encrypt"]
+    landing --> deploy["GitHub Actions deploy"]
+
+    obs --> grafana["grafana.erbsultan.uz"]
+    obs --> prometheus["Prometheus + node_exporter"]
+    obs --> loki["Loki + Alloy"]
+
+    nginx --> obs
+```
+
 ## Проекты
 
-| Папка | Описание |
-|-------|----------|
-| [`landing/`](./landing) | Парадный вход — [erbsultan.uz](https://erbsultan.uz) на захардненной Ubuntu VPS |
-| [`observability/`](./observability) | Мониторинг и логи homelab — Prometheus, Grafana, Loki |
+| Проект | Что делает | Статус |
+|--------|------------|--------|
+| [`landing/`](./landing) | Публичная входная точка и personal DevOps profile на [`erbsultan.uz`](https://erbsultan.uz) | ✅ Live |
+| [`observability/`](./observability) | Grafana, Prometheus, node_exporter, Loki и Alloy для метрик VPS и nginx-логов | ✅ Live |
+
+## Публичные Адреса
+
+| URL | Зачем |
+|-----|------|
+| [`https://erbsultan.uz`](https://erbsultan.uz) | Personal landing page |
+| [`https://grafana.erbsultan.uz`](https://grafana.erbsultan.uz) | Grafana dashboards и Explore UI |
+
+Prometheus, Loki, Alloy UI и node_exporter намеренно приватные. Grafana —
+единственная публичная точка входа в observability.
 
 ## Стек
 
-Docker, Linux, Nginx, Let's Encrypt, GitHub Actions, Prometheus, Grafana, Loki — добавляется по мере появления проектов.
+| Слой | Инструменты |
+|------|-------------|
+| Cloud | Vultr Cloud Compute, Frankfurt |
+| OS | Ubuntu 24.04 LTS |
+| Web | nginx, Let's Encrypt, certbot |
+| Deploy | GitHub Actions, SSH, rsync |
+| Security | ufw, fail2ban, key-only SSH |
+| Metrics | Prometheus, node_exporter, Grafana |
+| Logs | Loki, Alloy, Grafana Explore |
+| DNS | eskiz.uz, Duck DNS fallback |
+
+## Структура Репозитория
+
+```text
+erbols-homelab/
+├── landing/          # публичный сайт и VPS bootstrap-документация
+├── observability/    # Grafana, Prometheus, Loki, Alloy
+├── .github/          # deploy workflow
+├── README.md
+└── README_rus.md
+```
+
+У каждого проекта свой README со скриншотами, архитектурой, проверками и
+заметками по воспроизведению.
+
+## Дальше
+
+- 🚨 Добавить Grafana alerts для диска, high load и down-сервисов
+- 📬 Отправлять alerts в Telegram или email
+- 🔐 Добавить OpenVPN-проект для приватного доступа к homelab
+- 🧪 Добавить smoke checks для публичных URL
