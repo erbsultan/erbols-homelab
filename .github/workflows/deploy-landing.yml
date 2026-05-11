@@ -1,0 +1,39 @@
+name: deploy landing
+
+# Triggers:
+#   - push to main that touches landing/site/** (the actual content)
+#   - push to main that touches this workflow itself
+#   - manual run from the Actions tab
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'landing/site/**'
+      - '.github/workflows/deploy-landing.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: rsync landing/site -> homelab-fra-01
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: rsync site to VPS
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            landing/site/ \
+            erbol@108.61.211.82:/var/www/erbsultan.uz/html/
