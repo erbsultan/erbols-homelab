@@ -39,7 +39,11 @@
 }
 
 * { box-sizing: border-box; }
-html, body { background: var(--bg); color: var(--fg); }
+
+/* Background lives on <html> so the starfield <canvas> can sit between
+   the bg and the body content without an extra paint layer fighting it. */
+html { background: var(--bg); transition: background-color 0.15s ease; }
+body { color: var(--fg); transition: color 0.15s ease; }
 
 body {
   font-family: var(--sans);
@@ -50,7 +54,25 @@ body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Starfield canvas — fixed full-viewport, content sits on top */
+#starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Hide stars on light theme (no contrast on white) */
+[data-theme="light"] #starfield { display: none; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) #starfield { display: none; }
+}
+/* Respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  #starfield { display: none; }
 }
 
 /* Top bar — theme toggle on the left, language toggle on the right */
