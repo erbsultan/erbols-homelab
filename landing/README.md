@@ -147,6 +147,20 @@ once the cert is past its midpoint.
 
 ![cert details](docs/img/06-cert-details.png)
 
+### 7. CI/CD
+
+A small GitHub Actions workflow ([`.github/workflows/deploy-landing.yml`](../.github/workflows/deploy-landing.yml))
+fires on every push to `main` that touches `landing/site/**` and rsyncs
+the content onto the VPS under a dedicated deploy user.
+
+Edit `index.html` → `git push` → ~15 seconds → change is live on
+`https://erbsultan.uz`. No more manual `scp`.
+
+Auth is a separate ed25519 keypair (not the personal SSH key), private
+half in repo Secrets, public half in `erbol`'s `authorized_keys`.
+Host fingerprint is also pinned via Secret so the runner doesn't
+TOFU on every run.
+
 ## Layout
 
 ```
@@ -167,8 +181,8 @@ edit two lines, run.
 
 ## Up next
 
-- **GitHub Actions deploy** — push to `main` → rsync `site/` to the box, reload nginx
 - **Monitoring stack** — Prometheus + Grafana + node_exporter on `grafana.erbsultan.uz`
+- **WireGuard VPN** on a separate box, so internal services never have to hit the public internet
 - **Cloudflare DNS** (maybe) — delegate NS to CF for wildcard certs and DDoS edge
 
 For exact commands to reproduce this on a fresh box, see [PROVISION.md](./PROVISION.md).
