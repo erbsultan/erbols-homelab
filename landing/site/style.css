@@ -205,6 +205,31 @@ li { margin-bottom: 0.55rem; }
   color: var(--muted);
 }
 
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.25rem;
+}
+.facts li {
+  min-width: 0;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--rule);
+}
+.facts span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.facts strong {
+  display: block;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
 .contacts {
   font-family: var(--mono);
   font-size: 0.92rem;
@@ -230,5 +255,6 @@ footer {
   header { gap: 1.25rem; }
   header img { width: 88px; height: 88px; }
   .identity h1 { font-size: 1.5rem; }
+  .facts { grid-template-columns: 1fr; }
   .contacts { grid-template-columns: 5rem 1fr; font-size: 0.85rem; }
 }
