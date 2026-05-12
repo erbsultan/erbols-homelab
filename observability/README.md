@@ -17,6 +17,8 @@ This project watches the Vultr VPS that serves
 | 🖥️ VPS metrics | node_exporter | ✅ Scraped by Prometheus |
 | 🪵 Logs store | Loki | ✅ Private on `127.0.0.1:3100` |
 | 🚚 Logs shipper | Alloy | ✅ Tails nginx logs |
+| 🚨 Alerts | Grafana Alerting + Telegram | ✅ Provisioned from files |
+| 🚀 Config sync | GitHub Actions + rsync | ✅ Push to `main` syncs `observability/**` |
 | 🔐 Public access | nginx + Let's Encrypt | ✅ HTTPS enabled |
 
 ## Architecture
@@ -42,7 +44,90 @@ flowchart TD
 - ✅ `Node Exporter Full` dashboard is imported from dashboard ID `1860`
 - ✅ Loki is connected as a Grafana data source
 - ✅ Grafana Explore returns nginx logs with `{job="nginx"}`
+- ✅ Grafana Alerting provisions Telegram notifications and basic VPS alerts
+- ✅ GitHub Actions syncs observability config changes and reports status to Telegram
 - ✅ Prometheus, Loki, and Alloy UI stay private on localhost
+
+## Alerts
+
+Grafana provisions alerting from `grafana/provisioning/alerting`.
+
+Current rules:
+
+- `VPS node_exporter is down` — fires if Prometheus cannot scrape `node_exporter`
+- `VPS root disk usage is high` — fires when `/` stays above 85% for 10 minutes
+- `VPS load average is high` — fires when load stays above 1.5 per CPU for 10 minutes
+
+Telegram secrets live only in the real VPS `.env`:
+
+```env
+TELEGRAM_BOT_TOKEN=123456789:replace-me
+TELEGRAM_CHAT_ID=123456789
+```
+
+Apply or update alerting:
+
+From your local repo:
+
+```bash
+rsync -avz --delete --exclude '.env' \
+  -e "ssh -i ~/.ssh/homelab_ed25519" \
+  observability/ \
+  erbol@108.61.211.82:/opt/erbols-homelab/observability/
+```
+
+Then on the VPS:
+
+```bash
+cd /opt/erbols-homelab/observability
+docker compose up -d
+docker compose restart grafana
+```
+
+Then open Grafana and test the contact point:
+
+```text
+Alerts & IRM -> Alerting -> Notification configuration -> Contact points -> telegram-homelab -> Test
+```
+
+Provisioned alerting resources are managed from files. Grafana shows them in
+the UI, but edits should be made in git and applied by restarting Grafana.
+
+Telegram notifications use a custom message template in
+`grafana/provisioning/alerting/contact-points.yml`.
+
+## Config Sync
+
+Pushes to `main` that touch `observability/**` run
+`.github/workflows/deploy-observability.yml`.
+
+The workflow syncs this directory to the VPS while preserving the real `.env`:
+
+```text
+observability/ -> /opt/erbols-homelab/observability/
+```
+
+It also sends the sync result to Telegram. GitHub repository secrets required:
+
+```text
+SSH_PRIVATE_KEY
+SSH_KNOWN_HOSTS
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
+```
+
+After config sync, apply runtime changes on the VPS:
+
+```bash
+cd /opt/erbols-homelab/observability
+docker compose up -d
+```
+
+For Grafana provisioning changes, recreate Grafana:
+
+```bash
+docker compose up -d --force-recreate grafana
+```
 
 ## Screenshots
 
@@ -93,6 +178,10 @@ Loki query in Grafana Explore:
 observability/
 ├── compose.yml                       # Grafana, Prometheus, node_exporter, Loki, Alloy
 ├── .env.example                      # example Grafana admin variables
+├── grafana/
+│   └── provisioning/
+│       ├── datasources/              # Prometheus and Loki data sources
+│       └── alerting/                 # Telegram contact point, policy, alert rules
 ├── prometheus/
 │   └── prometheus.yml                # scrape config
 ├── loki/
@@ -136,10 +225,11 @@ bound to localhost or kept inside the Docker network.
 | Loki | ✅ returns `ready` |
 | Alloy | ✅ tails `/var/log/nginx/*.log` |
 | Logs | ✅ `{job="nginx"}` returns nginx entries |
+| Alerts | ✅ Telegram contact point and basic VPS rules are provisioned |
+| Config sync | ✅ GitHub Actions syncs `observability/**` and sends Telegram status |
 
 ## Next
 
-- 🚨 Add basic Grafana alerts for disk usage, high load, and service down
-- 📬 Send alerts to Telegram or email
 - 🧭 Add an nginx access-log dashboard
+- 📬 Optionally add email as a second alert contact point
 - 🔐 Later: move Grafana behind OpenVPN when the VPN project exists

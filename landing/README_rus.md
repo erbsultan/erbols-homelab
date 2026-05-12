@@ -31,6 +31,7 @@ EN/RU, переключатель темы, звёздный фон в dark mode
 | 🧱 Web server | nginx | ✅ Статика + редирект HTTP на HTTPS |
 | 🛡️ Hardening | ufw, fail2ban, SSH only by key | ✅ root SSH и password auth отключены |
 | 🚀 Deploy | GitHub Actions + rsync | ✅ Push в `main` деплоит `landing/site/**` |
+| 📬 Deploy notifications | GitHub Actions + Telegram | ✅ Отправляет результат деплоя в Telegram |
 | 📊 Observability | Grafana, Prometheus, Loki, Alloy | ✅ Вынесено в [`../observability`](../observability) |
 
 ## Архитектура
@@ -55,6 +56,7 @@ flowchart TD
 - ✅ `ufw` открывает только SSH, HTTP и HTTPS
 - ✅ `fail2ban` следит за SSH
 - ✅ GitHub Actions деплоит изменения сайта автоматически
+- ✅ GitHub Actions отправляет статус деплоя в Telegram
 - ✅ Grafana уже смотрит за метриками VPS и nginx-логами
 
 ## Скриншоты
@@ -103,6 +105,14 @@ Deploy workflow:
 edit landing/site/*
 git push origin main
 GitHub Actions -> rsync -> /var/www/erbsultan.uz/html
+GitHub Actions -> Telegram deploy status message
+```
+
+Для deploy notifications нужны GitHub repository secrets:
+
+```text
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
 ```
 
 ## Файлы
@@ -137,6 +147,7 @@ landing/
 | nginx | ✅ static site из `/var/www/erbsultan.uz/html` |
 | TLS | ✅ Let's Encrypt certificate выпущен |
 | CI/CD | ✅ GitHub Actions деплоит `landing/site/**` |
+| Notifications | ✅ GitHub Actions отправляет статус деплоя в Telegram |
 | Monitoring | ✅ вынесен в отдельный проект `observability/` |
 
 ## Дальше

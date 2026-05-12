@@ -1,20 +1,20 @@
-name: deploy landing
+name: deploy observability
 
 # Triggers:
-#   - push to main that touches landing/site/** (the actual content)
+#   - push to main that touches observability/** (except local secrets)
 #   - push to main that touches this workflow itself
 #   - manual run from the Actions tab
 on:
   push:
     branches: [main]
     paths:
-      - 'landing/site/**'
-      - '.github/workflows/deploy-landing.yml'
+      - 'observability/**'
+      - '.github/workflows/deploy-observability.yml'
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: rsync landing/site -> homelab-fra-01
+    name: rsync observability -> homelab-fra-01
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,12 +31,14 @@ jobs:
           printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: rsync site to VPS
+      - name: rsync observability config to VPS
         run: |
           rsync -avz --delete \
+            --exclude '.env' \
+            --exclude '.env.*' \
             -e "ssh -i ~/.ssh/id_ed25519" \
-            landing/site/ \
-            erbol@108.61.211.82:/var/www/erbsultan.uz/html/
+            observability/ \
+            erbol@108.61.211.82:/opt/erbols-homelab/observability/
 
       - name: Notify Telegram
         if: always()
@@ -45,6 +47,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           JOB_STATUS: ${{ job.status }}
+          PROJECT_NAME: observability
+          PROJECT_URL: https://grafana.erbsultan.uz
           REPOSITORY: ${{ github.repository }}
           WORKFLOW: ${{ github.workflow }}
           RUN_ID: ${{ github.run_id }}
@@ -90,7 +94,7 @@ jobs:
           commit_url = f'{os.environ["SERVER_URL"]}/{repo}/commit/{sha}'
 
           text = "\n".join([
-              f"Landing deploy: {status_label}",
+              f"{os.environ['PROJECT_NAME']} sync: {status_label}",
               "",
               f"Repository: {repo}",
               f"Workflow: {os.environ['WORKFLOW']} #{os.environ['RUN_NUMBER']}",
@@ -99,7 +103,9 @@ jobs:
               f"Actor: {os.environ['ACTOR']}",
               f"Event: {os.environ['EVENT_NAME']}",
               "",
-              "Site: https://erbsultan.uz",
+              f"Service: {os.environ['PROJECT_URL']}",
+              "Target: /opt/erbols-homelab/observability",
+              "Apply: docker compose up -d --force-recreate grafana",
               f"Run: {run_url}",
               f"Commit: {commit_url}",
           ])

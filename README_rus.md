@@ -15,9 +15,10 @@
 | 🌐 Публичный сайт | ✅ [`erbsultan.uz`](https://erbsultan.uz) |
 | 📊 Observability UI | ✅ [`grafana.erbsultan.uz`](https://grafana.erbsultan.uz) |
 | 🛡️ VPS hardening | ✅ key-only SSH, `ufw`, `fail2ban`, unattended upgrades |
-| 🚀 Deploy | ✅ GitHub Actions + `rsync` |
+| 🚀 Deploy | ✅ GitHub Actions + `rsync` + Telegram status |
 | 📈 Метрики | ✅ Prometheus + node_exporter |
 | 🪵 Логи | ✅ Loki + Alloy собирают nginx-логи |
+| 🚨 Alerts | ✅ Grafana Alerting отправляет в Telegram |
 
 ## Карта
 
@@ -83,7 +84,6 @@ erbols-homelab/
 
 ## Дальше
 
-- 🚨 Добавить Grafana alerts для диска, high load и down-сервисов
-- 📬 Отправлять alerts в Telegram или email
+- 📬 При желании добавить email вторым alert contact point
 - 🔐 Добавить OpenVPN-проект для приватного доступа к homelab
 - 🧪 Добавить smoke checks для публичных URL

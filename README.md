@@ -15,9 +15,10 @@ metrics, and log collection.
 | 🌐 Public site | ✅ [`erbsultan.uz`](https://erbsultan.uz) |
 | 📊 Observability UI | ✅ [`grafana.erbsultan.uz`](https://grafana.erbsultan.uz) |
 | 🛡️ VPS hardening | ✅ key-only SSH, `ufw`, `fail2ban`, unattended upgrades |
-| 🚀 Deploy | ✅ GitHub Actions + `rsync` |
+| 🚀 Deploy | ✅ GitHub Actions + `rsync` + Telegram status |
 | 📈 Metrics | ✅ Prometheus + node_exporter |
 | 🪵 Logs | ✅ Loki + Alloy collecting nginx logs |
+| 🚨 Alerts | ✅ Grafana Alerting sends to Telegram |
 
 ## Map
 
@@ -83,7 +84,6 @@ rebuild notes.
 
 ## Next
 
-- 🚨 Add Grafana alerts for disk usage, high load, and down services
-- 📬 Send alerts to Telegram or email
+- 📬 Optionally add email as a second alert contact point
 - 🔐 Add an OpenVPN project for private homelab access
 - 🧪 Add smoke checks for public URLs

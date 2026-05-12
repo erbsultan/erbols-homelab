@@ -31,6 +31,7 @@ into the personal homepage shown at `erbsultan.uz`.
 | 🧱 Web server | nginx | ✅ Static host + HTTP to HTTPS redirect |
 | 🛡️ Hardening | ufw, fail2ban, key-only SSH | ✅ Root SSH and password auth disabled |
 | 🚀 Deploy | GitHub Actions + rsync | ✅ Push to `main` deploys `landing/site/**` |
+| 📬 Deploy notifications | GitHub Actions + Telegram | ✅ Sends deploy result to Telegram |
 | 📊 Observability | Grafana, Prometheus, Loki, Alloy | ✅ Tracked in [`../observability`](../observability) |
 
 ## Architecture
@@ -55,6 +56,7 @@ flowchart TD
 - ✅ `ufw` allows only SSH, HTTP, and HTTPS
 - ✅ `fail2ban` watches SSH
 - ✅ GitHub Actions deploys site changes automatically
+- ✅ GitHub Actions sends deploy status to Telegram
 - ✅ Grafana now watches metrics and nginx logs from the VPS
 
 ## Screenshots
@@ -103,6 +105,14 @@ Deploy workflow:
 edit landing/site/*
 git push origin main
 GitHub Actions -> rsync -> /var/www/erbsultan.uz/html
+GitHub Actions -> Telegram deploy status message
+```
+
+Deploy notifications require these GitHub repository secrets:
+
+```text
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
 ```
 
 ## Files
@@ -137,6 +147,7 @@ landing/
 | nginx | ✅ static site served from `/var/www/erbsultan.uz/html` |
 | TLS | ✅ Let's Encrypt certificate deployed |
 | CI/CD | ✅ GitHub Actions deploys `landing/site/**` |
+| Notifications | ✅ GitHub Actions sends deploy status to Telegram |
 | Monitoring | ✅ moved to the dedicated `observability/` project |
 
 ## Next

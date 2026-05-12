@@ -8,10 +8,27 @@ services:
     environment:
       GF_SERVER_DOMAIN: grafana.erbsultan.uz
       GF_SERVER_ROOT_URL: https://grafana.erbsultan.uz/
+      GF_PATHS_PROVISIONING: /tmp/grafana-provisioning
+    entrypoint:
+      - sh
+      - -ec
+    command:
+      - |
+        cp -R /etc/grafana/provisioning-src /tmp/grafana-provisioning
+        mkdir -p /tmp/grafana-provisioning/dashboards /tmp/grafana-provisioning/plugins
+        sed \
+          -e "s|__TELEGRAM_BOT_TOKEN__|$${TELEGRAM_BOT_TOKEN}|g" \
+          -e "s|__TELEGRAM_CHAT_ID__|$${TELEGRAM_CHAT_ID}|g" \
+          /etc/grafana/provisioning-src/alerting/contact-points.yml \
+          > /tmp/grafana-provisioning/alerting/contact-points.yml
+        exec /run.sh
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning-src:ro
+    depends_on:
+      - prometheus
 
   prometheus:
     image: prom/prometheus:v3.7.3

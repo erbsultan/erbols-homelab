@@ -1,0 +1,42 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: telegram-homelab
+    receivers:
+      - uid: telegram_homelab
+        type: telegram
+        disableResolveMessage: false
+        settings:
+          bottoken: "__TELEGRAM_BOT_TOKEN__"
+          chatid: "__TELEGRAM_CHAT_ID__"
+          message: |
+            Homelab alert update
+
+            {{- if .Alerts.Firing }}
+
+            Firing: {{ len .Alerts.Firing }}
+            {{- range .Alerts.Firing }}
+
+            Alert: {{ .Labels.alertname }}
+            Severity: {{ .Labels.severity }}
+            Service: {{ .Labels.service }}
+            Summary: {{ .Annotations.summary }}
+            Details: {{ .Annotations.description }}
+            Started: {{ .StartsAt }}
+            Grafana: {{ .GeneratorURL }}
+            {{- end }}
+            {{- end }}
+
+            {{- if .Alerts.Resolved }}
+
+            Resolved: {{ len .Alerts.Resolved }}
+            {{- range .Alerts.Resolved }}
+
+            Alert: {{ .Labels.alertname }}
+            Service: {{ .Labels.service }}
+            Summary: {{ .Annotations.summary }}
+            Resolved at: {{ .EndsAt }}
+            Grafana: {{ .GeneratorURL }}
+            {{- end }}
+            {{- end }}
