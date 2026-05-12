@@ -19,7 +19,7 @@ metrics, and log collection.
 | 📈 Metrics | ✅ Prometheus + node_exporter |
 | 🪵 Logs | ✅ Loki + Alloy collecting nginx logs |
 | 🚨 Alerts | ✅ Grafana Alerting sends to Telegram |
-| 🧪 Smoke checks | ✅ GitHub Actions checks public URLs every 30 minutes |
+| 🧪 Smoke checks | ✅ GitHub Actions checks public URLs every minute |
 
 ## Map
 

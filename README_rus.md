@@ -19,7 +19,7 @@
 | 📈 Метрики | ✅ Prometheus + node_exporter |
 | 🪵 Логи | ✅ Loki + Alloy собирают nginx-логи |
 | 🚨 Alerts | ✅ Grafana Alerting отправляет в Telegram |
-| 🧪 Smoke checks | ✅ GitHub Actions проверяет публичные URL каждые 30 минут |
+| 🧪 Smoke checks | ✅ GitHub Actions проверяет публичные URL каждую минуту |
 
 ## Карта
 

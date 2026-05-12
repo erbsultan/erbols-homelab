@@ -19,7 +19,7 @@
 | 🚚 Доставка логов | Alloy | ✅ Читает nginx-логи |
 | 🚨 Alerts | Grafana Alerting + Telegram | ✅ Provisioning из файлов |
 | 🚀 Config sync | GitHub Actions + rsync | ✅ Push в `main` синхронизирует `observability/**` |
-| 🧪 Smoke checks | GitHub Actions + Telegram | ✅ Проверяет публичные URL каждые 30 минут |
+| 🧪 Smoke checks | GitHub Actions + Telegram | ✅ Проверяет публичные URL каждую минуту |
 | 🔐 Публичный доступ | nginx + Let's Encrypt | ✅ HTTPS включён |
 
 ## Архитектура
@@ -133,7 +133,7 @@ docker compose up -d --force-recreate grafana
 
 ## Smoke Checks
 
-`.github/workflows/smoke-checks.yml` проверяет публичные endpoints каждые 30 минут:
+`.github/workflows/smoke-checks.yml` проверяет публичные endpoints каждую минуту:
 
 - `https://erbsultan.uz`
 - `https://grafana.erbsultan.uz`
@@ -246,7 +246,7 @@ Grafana — единственная публичная точка входа в
 | Logs | ✅ `{job="nginx"}` возвращает nginx entries |
 | Alerts | ✅ Telegram contact point и базовые VPS rules provisioned |
 | Config sync | ✅ GitHub Actions синхронизирует `observability/**` и отправляет Telegram status |
-| Smoke checks | ✅ public URLs проверяются из GitHub Actions каждые 30 минут |
+| Smoke checks | ✅ public URLs проверяются из GitHub Actions каждую минуту |
 
 ## Дальше
 

@@ -19,7 +19,7 @@ This project watches the Vultr VPS that serves
 | 🚚 Logs shipper | Alloy | ✅ Tails nginx logs |
 | 🚨 Alerts | Grafana Alerting + Telegram | ✅ Provisioned from files |
 | 🚀 Config sync | GitHub Actions + rsync | ✅ Push to `main` syncs `observability/**` |
-| 🧪 Smoke checks | GitHub Actions + Telegram | ✅ Checks public URLs every 30 minutes |
+| 🧪 Smoke checks | GitHub Actions + Telegram | ✅ Checks public URLs every minute |
 | 🔐 Public access | nginx + Let's Encrypt | ✅ HTTPS enabled |
 
 ## Architecture
@@ -133,7 +133,7 @@ docker compose up -d --force-recreate grafana
 
 ## Smoke Checks
 
-`.github/workflows/smoke-checks.yml` checks public endpoints every 30 minutes:
+`.github/workflows/smoke-checks.yml` checks public endpoints every minute:
 
 - `https://erbsultan.uz`
 - `https://grafana.erbsultan.uz`
@@ -246,7 +246,7 @@ bound to localhost or kept inside the Docker network.
 | Logs | ✅ `{job="nginx"}` returns nginx entries |
 | Alerts | ✅ Telegram contact point and basic VPS rules are provisioned |
 | Config sync | ✅ GitHub Actions syncs `observability/**` and sends Telegram status |
-| Smoke checks | ✅ public URLs are checked from GitHub Actions every 30 minutes |
+| Smoke checks | ✅ public URLs are checked from GitHub Actions every minute |
 
 ## Next
 

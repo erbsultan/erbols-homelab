@@ -1,11 +1,11 @@
 name: smoke checks
 
 # Triggers:
-#   - every 30 minutes
+#   - every minute
 #   - manual run from the Actions tab
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '* * * * *'
   workflow_dispatch:
 
 jobs:
