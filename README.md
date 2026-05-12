@@ -70,6 +70,26 @@ Grafana is the only public observability entrypoint.
 | Logs | Loki, Alloy, Grafana Explore |
 | DNS | eskiz.uz, Duck DNS fallback |
 
+## CI/CD Pipeline
+
+The public site follows the same delivery flow used in a small production
+service:
+
+```mermaid
+flowchart LR
+    dev["1. Develop<br/>edit landing/site locally"] --> github["GitHub<br/>push to main"]
+    github --> build["2. Build<br/>package static artifact"]
+    build --> test["3. Test<br/>JS syntax + local link checks"]
+    test --> deploy["4. Deploy<br/>rsync to VPS production"]
+    deploy --> smoke["Smoke check<br/>verify erbsultan.uz"]
+    smoke --> notify["Telegram status"]
+```
+
+The workflow lives in
+[`deploy-landing.yml`](./.github/workflows/deploy-landing.yml). Deploy runs
+only after build and test pass, then a production smoke check verifies the
+live site before the final Telegram notification.
+
 ## Repository Layout
 
 ```text

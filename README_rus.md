@@ -70,6 +70,25 @@ Prometheus, Loki, Alloy UI и node_exporter намеренно приватны�
 | Logs | Loki, Alloy, Grafana Explore |
 | DNS | eskiz.uz, Duck DNS fallback |
 
+## CI/CD Pipeline
+
+Публичный сайт деплоится по схеме, близкой к маленькому production-сервису:
+
+```mermaid
+flowchart LR
+    dev["1. Develop<br/>правка landing/site локально"] --> github["GitHub<br/>push в main"]
+    github --> build["2. Build<br/>упаковка static artifact"]
+    build --> test["3. Test<br/>JS syntax + local link checks"]
+    test --> deploy["4. Deploy<br/>rsync на VPS production"]
+    deploy --> smoke["Smoke check<br/>проверка erbsultan.uz"]
+    smoke --> notify["Telegram status"]
+```
+
+Workflow лежит в
+[`deploy-landing.yml`](./.github/workflows/deploy-landing.yml). Deploy
+запускается только после успешных build и test, затем production smoke check
+проверяет живой сайт перед финальным уведомлением в Telegram.
+
 ## Структура Репозитория
 
 ```text

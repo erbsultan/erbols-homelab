@@ -104,13 +104,18 @@ Deploy workflow:
 ```text
 edit landing/site/*
 git push origin main
-GitHub Actions -> rsync -> /var/www/erbsultan.uz/html
-GitHub Actions -> Telegram deploy status message
+GitHub Actions -> build static artifact
+GitHub Actions -> test JS syntax and local links
+GitHub Actions -> rsync artifact to /var/www/erbsultan.uz/html
+GitHub Actions -> smoke check https://erbsultan.uz
+GitHub Actions -> Telegram pipeline status message
 ```
 
-Deploy notifications require these GitHub repository secrets:
+Deploy requires these GitHub repository secrets:
 
 ```text
+SSH_PRIVATE_KEY
+SSH_KNOWN_HOSTS
 TELEGRAM_BOT_TOKEN
 TELEGRAM_CHAT_ID
 ```
