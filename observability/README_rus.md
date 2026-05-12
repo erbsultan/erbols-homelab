@@ -19,6 +19,7 @@
 | 🚚 Доставка логов | Alloy | ✅ Читает nginx-логи |
 | 🚨 Alerts | Grafana Alerting + Telegram | ✅ Provisioning из файлов |
 | 🚀 Config sync | GitHub Actions + rsync | ✅ Push в `main` синхронизирует `observability/**` |
+| 🧪 Smoke checks | GitHub Actions + Telegram | ✅ Проверяет публичные URL каждые 30 минут |
 | 🔐 Публичный доступ | nginx + Let's Encrypt | ✅ HTTPS включён |
 
 ## Архитектура
@@ -46,6 +47,7 @@ flowchart TD
 - ✅ В Grafana Explore запрос `{job="nginx"}` возвращает nginx-логи
 - ✅ Grafana Alerting настраивает Telegram-уведомления и базовые VPS alerts
 - ✅ GitHub Actions синхронизирует observability config и отправляет статус в Telegram
+- ✅ GitHub Actions проверяет публичные endpoints и отправляет падения в Telegram
 - ✅ Prometheus, Loki и Alloy UI не торчат наружу
 
 ## Alerts
@@ -127,6 +129,23 @@ docker compose up -d
 
 ```bash
 docker compose up -d --force-recreate grafana
+```
+
+## Smoke Checks
+
+`.github/workflows/smoke-checks.yml` проверяет публичные endpoints каждые 30 минут:
+
+- `https://erbsultan.uz`
+- `https://grafana.erbsultan.uz`
+
+Scheduled runs отправляют Telegram только при падении. Manual runs отправляют
+Telegram и при успехе, и при падении, чтобы workflow было удобно тестировать.
+
+Нужные GitHub repository secrets:
+
+```text
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
 ```
 
 ## Скриншоты
@@ -227,6 +246,7 @@ Grafana — единственная публичная точка входа в
 | Logs | ✅ `{job="nginx"}` возвращает nginx entries |
 | Alerts | ✅ Telegram contact point и базовые VPS rules provisioned |
 | Config sync | ✅ GitHub Actions синхронизирует `observability/**` и отправляет Telegram status |
+| Smoke checks | ✅ public URLs проверяются из GitHub Actions каждые 30 минут |
 
 ## Дальше
 

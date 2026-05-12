@@ -19,6 +19,7 @@ This project watches the Vultr VPS that serves
 | 🚚 Logs shipper | Alloy | ✅ Tails nginx logs |
 | 🚨 Alerts | Grafana Alerting + Telegram | ✅ Provisioned from files |
 | 🚀 Config sync | GitHub Actions + rsync | ✅ Push to `main` syncs `observability/**` |
+| 🧪 Smoke checks | GitHub Actions + Telegram | ✅ Checks public URLs every 30 minutes |
 | 🔐 Public access | nginx + Let's Encrypt | ✅ HTTPS enabled |
 
 ## Architecture
@@ -46,6 +47,7 @@ flowchart TD
 - ✅ Grafana Explore returns nginx logs with `{job="nginx"}`
 - ✅ Grafana Alerting provisions Telegram notifications and basic VPS alerts
 - ✅ GitHub Actions syncs observability config changes and reports status to Telegram
+- ✅ GitHub Actions checks public endpoints and reports failures to Telegram
 - ✅ Prometheus, Loki, and Alloy UI stay private on localhost
 
 ## Alerts
@@ -127,6 +129,23 @@ For Grafana provisioning changes, recreate Grafana:
 
 ```bash
 docker compose up -d --force-recreate grafana
+```
+
+## Smoke Checks
+
+`.github/workflows/smoke-checks.yml` checks public endpoints every 30 minutes:
+
+- `https://erbsultan.uz`
+- `https://grafana.erbsultan.uz`
+
+Scheduled runs send Telegram only on failure. Manual runs send Telegram for
+both success and failure, which is useful for testing the workflow.
+
+GitHub repository secrets required:
+
+```text
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
 ```
 
 ## Screenshots
@@ -227,6 +246,7 @@ bound to localhost or kept inside the Docker network.
 | Logs | ✅ `{job="nginx"}` returns nginx entries |
 | Alerts | ✅ Telegram contact point and basic VPS rules are provisioned |
 | Config sync | ✅ GitHub Actions syncs `observability/**` and sends Telegram status |
+| Smoke checks | ✅ public URLs are checked from GitHub Actions every 30 minutes |
 
 ## Next
 

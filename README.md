@@ -19,6 +19,7 @@ metrics, and log collection.
 | 📈 Metrics | ✅ Prometheus + node_exporter |
 | 🪵 Logs | ✅ Loki + Alloy collecting nginx logs |
 | 🚨 Alerts | ✅ Grafana Alerting sends to Telegram |
+| 🧪 Smoke checks | ✅ GitHub Actions checks public URLs every 30 minutes |
 
 ## Map
 
@@ -30,6 +31,7 @@ flowchart TD
     landing --> site["erbsultan.uz"]
     landing --> nginx["nginx + Let's Encrypt"]
     landing --> deploy["GitHub Actions deploy"]
+    landing --> smoke["GitHub Actions smoke checks"]
 
     obs --> grafana["grafana.erbsultan.uz"]
     obs --> prometheus["Prometheus + node_exporter"]
@@ -86,4 +88,4 @@ rebuild notes.
 
 - 📬 Optionally add email as a second alert contact point
 - 🔐 Add an OpenVPN project for private homelab access
-- 🧪 Add smoke checks for public URLs
+- 🧭 Add an nginx access-log dashboard

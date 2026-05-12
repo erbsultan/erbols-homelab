@@ -19,6 +19,7 @@
 | 📈 Метрики | ✅ Prometheus + node_exporter |
 | 🪵 Логи | ✅ Loki + Alloy собирают nginx-логи |
 | 🚨 Alerts | ✅ Grafana Alerting отправляет в Telegram |
+| 🧪 Smoke checks | ✅ GitHub Actions проверяет публичные URL каждые 30 минут |
 
 ## Карта
 
@@ -30,6 +31,7 @@ flowchart TD
     landing --> site["erbsultan.uz"]
     landing --> nginx["nginx + Let's Encrypt"]
     landing --> deploy["GitHub Actions deploy"]
+    landing --> smoke["GitHub Actions smoke checks"]
 
     obs --> grafana["grafana.erbsultan.uz"]
     obs --> prometheus["Prometheus + node_exporter"]
@@ -86,4 +88,4 @@ erbols-homelab/
 
 - 📬 При желании добавить email вторым alert contact point
 - 🔐 Добавить OpenVPN-проект для приватного доступа к homelab
-- 🧪 Добавить smoke checks для публичных URL
+- 🧭 Сделать nginx access-log dashboard

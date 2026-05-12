@@ -1,0 +1,139 @@
+name: smoke checks
+
+# Triggers:
+#   - every 30 minutes
+#   - manual run from the Actions tab
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: public endpoint smoke checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check public endpoints
+        id: smoke
+        continue-on-error: true
+        run: |
+          python3 - <<'PY'
+          import os
+          import ssl
+          import sys
+          import time
+          import urllib.error
+          import urllib.request
+
+          targets = [
+              {
+                  "name": "landing",
+                  "url": "https://erbsultan.uz",
+                  "expected": "Erbol Sultanbayev",
+              },
+              {
+                  "name": "grafana",
+                  "url": "https://grafana.erbsultan.uz",
+                  "expected": "Grafana",
+              },
+          ]
+
+          timeout = 15
+          lines = []
+          failures = []
+          context = ssl.create_default_context()
+
+          for target in targets:
+              started = time.monotonic()
+              request = urllib.request.Request(
+                  target["url"],
+                  headers={"User-Agent": "erbols-homelab-smoke-check/1.0"},
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=timeout, context=context) as response:
+                      body = response.read(500_000).decode("utf-8", errors="replace")
+                      status = response.getcode()
+                  elapsed_ms = round((time.monotonic() - started) * 1000)
+
+                  if status < 200 or status >= 400:
+                      raise RuntimeError(f"unexpected HTTP status {status}")
+                  if target["expected"] not in body:
+                      raise RuntimeError(f"missing expected text: {target['expected']}")
+
+                  lines.append(f"OK {target['name']} {status} {elapsed_ms}ms {target['url']}")
+              except Exception as exc:
+                  elapsed_ms = round((time.monotonic() - started) * 1000)
+                  line = f"FAIL {target['name']} {elapsed_ms}ms {target['url']} - {exc}"
+                  lines.append(line)
+                  failures.append(line)
+
+          summary = "\n".join(lines)
+          print(summary)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              status = "failure" if failures else "success"
+              output.write(f"status={status}\n")
+              output.write("summary<<EOF\n")
+              output.write(summary + "\n")
+              output.write("EOF\n")
+
+          if failures:
+              sys.exit(1)
+          PY
+
+      - name: Notify Telegram
+        if: always() && (steps.smoke.outcome == 'failure' || github.event_name == 'workflow_dispatch')
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SMOKE_OUTCOME: ${{ steps.smoke.outcome }}
+          SMOKE_SUMMARY: ${{ steps.smoke.outputs.summary }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW: ${{ github.workflow }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_NUMBER: ${{ github.run_number }}
+          EVENT_NAME: ${{ github.event_name }}
+          SERVER_URL: ${{ github.server_url }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import sys
+          import urllib.parse
+          import urllib.request
+
+          token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+          if not token or not chat_id:
+              print("Telegram secrets are not configured; skipping notification.")
+              sys.exit(0)
+
+          outcome = os.environ["SMOKE_OUTCOME"]
+          status_label = "SUCCESS" if outcome == "success" else "FAILED"
+          repo = os.environ["REPOSITORY"]
+          run_url = f'{os.environ["SERVER_URL"]}/{repo}/actions/runs/{os.environ["RUN_ID"]}'
+
+          text = "\n".join([
+              f"public smoke checks: {status_label}",
+              "",
+              os.environ.get("SMOKE_SUMMARY", "").strip(),
+              "",
+              f"Workflow: {os.environ['WORKFLOW']} #{os.environ['RUN_NUMBER']}",
+              f"Event: {os.environ['EVENT_NAME']}",
+              f"Run: {run_url}",
+          ])
+
+          data = urllib.parse.urlencode({
+              "chat_id": chat_id,
+              "text": text,
+              "disable_web_page_preview": "true",
+          }).encode("utf-8")
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+          with urllib.request.urlopen(url, data=data, timeout=15) as response:
+              print(response.read().decode("utf-8"))
+          PY
+
+      - name: Fail workflow if smoke checks failed
+        if: steps.smoke.outcome == 'failure'
+        run: exit 1
