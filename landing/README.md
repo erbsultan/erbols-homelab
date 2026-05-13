@@ -103,12 +103,13 @@ Deploy workflow:
 
 ```text
 edit landing/site/*
-git push origin main
-GitHub Actions -> build static artifact
-GitHub Actions -> test JS syntax and local links
-GitHub Actions -> rsync artifact to /var/www/erbsultan.uz/html
-GitHub Actions -> smoke check https://erbsultan.uz
-GitHub Actions -> Telegram pipeline status message
+open a pull request to main
+GitHub Actions on PR -> build static artifact
+GitHub Actions on PR -> test JS syntax and local links
+merge PR into main
+GitHub Actions on main -> rsync artifact to /var/www/erbsultan.uz/html
+GitHub Actions on main -> smoke check https://erbsultan.uz
+GitHub Actions on main -> Telegram pipeline status message
 ```
 
 Deploy requires these GitHub repository secrets:
