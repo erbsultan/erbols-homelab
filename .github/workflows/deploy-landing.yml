@@ -1,13 +1,18 @@
 name: landing ci/cd
 
 # Pipeline:
-#   develop -> GitHub -> build -> test -> deploy -> smoke -> Telegram status
+#   feature branch -> pull request -> build/test -> merge to main -> deploy -> smoke -> Telegram status
 #
 # Triggers:
-#   - push to main that touches landing/site/** (the actual content)
-#   - push to main that touches this workflow itself
+#   - pull request to main that touches landing/site/** or this workflow
+#   - push to main that touches landing/site/** or this workflow
 #   - manual run from the Actions tab
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'landing/site/**'
+      - '.github/workflows/deploy-landing.yml'
   push:
     branches: [main]
     paths:
@@ -113,6 +118,7 @@ jobs:
     needs:
       - build
       - test
+    if: github.event_name != 'pull_request'
     steps:
       - name: Download site artifact
         uses: actions/download-artifact@v4
@@ -142,6 +148,7 @@ jobs:
     name: smoke check production
     runs-on: ubuntu-latest
     needs: deploy
+    if: github.event_name != 'pull_request'
     steps:
       - name: Check deployed site
         run: |
@@ -183,7 +190,7 @@ jobs:
       - test
       - deploy
       - smoke
-    if: always()
+    if: always() && github.event_name != 'pull_request'
     steps:
       - name: Notify Telegram
         continue-on-error: true
