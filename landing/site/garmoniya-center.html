@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garmoniya Center NGO Website · Erbol Sultanbayev</title>
+  <meta name="description" content="Case study for a multilingual NGO website built with Astro, TypeScript, Docker, Nginx, and a hardened Ubuntu VPS on UZTELECOM Cloud.">
+  <meta property="og:title" content="Garmoniya Center NGO Website">
+  <meta property="og:description" content="Multilingual NGO website deployed with Docker Compose, host Nginx reverse proxy, UFW, Fail2Ban, and key-only SSH.">
+  <meta property="og:image" content="https://erbsultan.uz/me.jpg">
+  <meta property="og:url" content="https://erbsultan.uz/garmoniya-center.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
+</head>
+<body>
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<div class="topbar">
+  <div class="theme-toggle" role="group" aria-label="Theme">
+    <button class="theme-btn" data-theme="light" aria-label="Light theme" title="Light">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="system" aria-label="System theme" title="System">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <path d="M8 21h8M12 17v4"/>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="dark" aria-label="Dark theme" title="Dark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="lang">
+    <span class="active">EN</span>
+    <span class="sep">|</span>
+    <a href="/garmoniya-center-ru.html">RU</a>
+  </div>
+</div>
+
+<nav class="case-nav">
+  <a href="/">← Back to portfolio</a>
+</nav>
+
+<header class="case-header">
+  <h1>Garmoniya Center NGO Website</h1>
+  <p class="lede">A multilingual official website for an NGO, built with Astro and TypeScript and deployed to a production Ubuntu server on UZTELECOM Cloud.</p>
+  <div class="case-status" aria-label="Project status">
+    <span>public IP live</span>
+    <span>domain pending approval</span>
+    <span>HTTPS after DNS activation</span>
+  </div>
+</header>
+
+<section>
+  <h2>Overview</h2>
+  <p>This project is a practical production deployment for Garmoniya Center. The website supports Russian, Uzbek Latin, and English, and is prepared for the official domain <code>garmoniya-center.uz</code> once approval and DNS activation are complete.</p>
+  <p>My work focused on building the site and setting up a simple, understandable deployment path: Docker multi-stage build, Docker Compose on the server, host Nginx reverse proxy, and a manual deployment script.</p>
+</section>
+
+<section>
+  <h2>Stack</h2>
+  <ul class="facts">
+    <li><span>frontend</span><strong>Astro · TypeScript</strong></li>
+    <li><span>languages</span><strong>Russian · Uzbek Latin · English</strong></li>
+    <li><span>server</span><strong>UZTELECOM Cloud VPS · Ubuntu 24.04</strong></li>
+    <li><span>runtime</span><strong>Docker multi-stage build · Docker Compose</strong></li>
+    <li><span>routing</span><strong>Host Nginx reverse proxy</strong></li>
+    <li><span>repository</span><strong>GitLab · CI/CD validation</strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Server Setup</h2>
+  <ul class="case-list">
+    <li>Provisioned an Ubuntu 24.04 VPS on UZTELECOM Cloud.</li>
+    <li>Configured UFW so only required network ports are open.</li>
+    <li>Enabled Fail2Ban for SSH protection.</li>
+    <li>Used SSH key authentication and disabled password login.</li>
+    <li>Configured host Nginx as the reverse proxy in front of the Docker Compose service.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Deployment</h2>
+  <p>The application is packaged with a Docker multi-stage build and started through Docker Compose. GitLab CI/CD currently validates the project, while production deployment is done with a manual script so each release is explicit and easy to inspect.</p>
+</section>
+
+<section>
+  <h2>Current Status</h2>
+  <p>The public IP deployment is live. The official domain <code>garmoniya-center.uz</code> is pending approval; HTTPS and official email will be configured after DNS activation.</p>
+</section>
+
+<section>
+  <h2>What I Learned</h2>
+  <p>This project gave me more practice with a real Linux server, Docker-based deployment, Nginx reverse proxy configuration, and basic production hardening. I kept the setup intentionally modest and understandable instead of adding tools the project does not need yet.</p>
+</section>
+
+<footer>
+  <a href="/">portfolio</a> · <a href="https://github.com/erbsultan">github</a> · <a href="https://www.linkedin.com/in/erbol-sultanbayev/">linkedin</a>
+</footer>
+
+<script src="/stars.js"></script>
+</body>
+</html>

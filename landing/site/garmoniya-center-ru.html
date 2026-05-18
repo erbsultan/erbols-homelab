@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garmoniya Center NGO Website · Эрбол Султанбаев</title>
+  <meta name="description" content="Кейс о многоязычном сайте ННО на Astro, TypeScript, Docker, Nginx и Ubuntu VPS в UZTELECOM Cloud.">
+  <meta property="og:title" content="Garmoniya Center NGO Website">
+  <meta property="og:description" content="Многоязычный сайт ННО с Docker Compose, host Nginx reverse proxy, UFW, Fail2Ban и SSH только по ключу.">
+  <meta property="og:image" content="https://erbsultan.uz/me.jpg">
+  <meta property="og:url" content="https://erbsultan.uz/garmoniya-center-ru.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
+</head>
+<body>
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<div class="topbar">
+  <div class="theme-toggle" role="group" aria-label="Тема">
+    <button class="theme-btn" data-theme="light" aria-label="Светлая" title="Светлая">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="system" aria-label="Системная" title="Системная">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <path d="M8 21h8M12 17v4"/>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="dark" aria-label="Тёмная" title="Тёмная">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="lang">
+    <a href="/garmoniya-center.html">EN</a>
+    <span class="sep">|</span>
+    <span class="active">RU</span>
+  </div>
+</div>
+
+<nav class="case-nav">
+  <a href="/ru.html">← Назад к портфолио</a>
+</nav>
+
+<header class="case-header">
+  <h1>Garmoniya Center NGO Website</h1>
+  <p class="lede">Многоязычный официальный сайт для ННО, собранный на Astro и TypeScript и размещённый на production-сервере Ubuntu в UZTELECOM Cloud.</p>
+  <div class="case-status" aria-label="Статус проекта">
+    <span>public IP live</span>
+    <span>домен на утверждении</span>
+    <span>HTTPS после DNS</span>
+  </div>
+</header>
+
+<section>
+  <h2>Обзор</h2>
+  <p>Это практический production-деплой для Garmoniya Center. Сайт поддерживает русский, узбекский на латинице и английский, а также подготовлен к официальному домену <code>garmoniya-center.uz</code> после утверждения и активации DNS.</p>
+  <p>Моя часть работы: сам сайт и понятный путь деплоя — Docker multi-stage build, Docker Compose на сервере, host Nginx reverse proxy и ручной deployment script.</p>
+</section>
+
+<section>
+  <h2>Стек</h2>
+  <ul class="facts">
+    <li><span>frontend</span><strong>Astro · TypeScript</strong></li>
+    <li><span>languages</span><strong>Русский · Uzbek Latin · English</strong></li>
+    <li><span>server</span><strong>UZTELECOM Cloud VPS · Ubuntu 24.04</strong></li>
+    <li><span>runtime</span><strong>Docker multi-stage build · Docker Compose</strong></li>
+    <li><span>routing</span><strong>Host Nginx reverse proxy</strong></li>
+    <li><span>repository</span><strong>GitLab · CI/CD validation</strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Настройка сервера</h2>
+  <ul class="case-list">
+    <li>Подготовил Ubuntu 24.04 VPS в UZTELECOM Cloud.</li>
+    <li>Настроил UFW, чтобы были открыты только нужные порты.</li>
+    <li>Включил Fail2Ban для защиты SSH.</li>
+    <li>Настроил вход по SSH-ключу и отключил password login.</li>
+    <li>Настроил host Nginx как reverse proxy перед сервисом в Docker Compose.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Деплой</h2>
+  <p>Приложение собирается через Docker multi-stage build и запускается через Docker Compose. GitLab CI/CD сейчас проверяет проект, а production-деплой выполняется ручным скриптом, чтобы каждый релиз был явным и легко проверяемым.</p>
+</section>
+
+<section>
+  <h2>Текущий статус</h2>
+  <p>Деплой по публичному IP уже работает. Официальный домен <code>garmoniya-center.uz</code> ожидает утверждения; HTTPS и официальная почта будут настроены после активации DNS.</p>
+</section>
+
+<section>
+  <h2>Что я прокачал</h2>
+  <p>Проект дал больше практики с реальным Linux-сервером, Docker-деплоем, настройкой Nginx reverse proxy и базовым production hardening. Конфигурация специально оставлена простой и понятной, без лишних инструментов, которые проекту пока не нужны.</p>
+</section>
+
+<footer>
+  <a href="/ru.html">портфолио</a> · <a href="https://github.com/erbsultan">github</a> · <a href="https://www.linkedin.com/in/erbol-sultanbayev/">linkedin</a>
+</footer>
+
+<script src="/stars.js"></script>
+</body>
+</html>

@@ -180,6 +180,10 @@ h2 {
 }
 p { margin: 0 0 0.85rem; }
 p:last-child { margin-bottom: 0; }
+.lede {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
 
 a {
   color: var(--fg);
@@ -203,6 +207,59 @@ li { margin-bottom: 0.55rem; }
   font-family: var(--mono);
   font-size: 0.88em;
   color: var(--muted);
+}
+
+.case-nav {
+  margin-top: -1.25rem;
+  margin-bottom: 2.5rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.case-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.case-nav a:hover {
+  color: var(--fg);
+}
+
+.case-header {
+  display: block;
+}
+
+.case-header h1 {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  line-height: 1.15;
+}
+
+.case-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+}
+
+.case-status span {
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  padding: 0.25rem 0.65rem;
+}
+
+.case-list {
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+.case-list li {
+  margin-bottom: 0.45rem;
 }
 
 .facts {
