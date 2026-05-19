@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Garmoniya Center NGO Website · Erbol Sultanbayev</title>
-  <meta name="description" content="Case study for a multilingual NGO website built with Astro, TypeScript, Docker, Nginx, and a hardened Ubuntu VPS on UZTELECOM Cloud.">
+  <meta name="description" content="Case study for a live multilingual NGO website built with Astro, TypeScript, Docker, Nginx, and a hardened Ubuntu VPS on UZTELECOM Cloud.">
   <meta property="og:title" content="Garmoniya Center NGO Website">
-  <meta property="og:description" content="Multilingual NGO website deployed with Docker Compose, host Nginx reverse proxy, UFW, Fail2Ban, and key-only SSH.">
+  <meta property="og:description" content="Live multilingual NGO website deployed with Docker Compose, host Nginx reverse proxy, UFW, Fail2Ban, and key-only SSH.">
   <meta property="og:image" content="https://erbsultan.uz/me.jpg">
   <meta property="og:url" content="https://erbsultan.uz/garmoniya-center.html">
   <meta property="og:type" content="article">
@@ -53,15 +53,15 @@
   <h1>Garmoniya Center NGO Website</h1>
   <p class="lede">A multilingual official website for an NGO, built with Astro and TypeScript and deployed to a production Ubuntu server on UZTELECOM Cloud.</p>
   <div class="case-status" aria-label="Project status">
-    <span>public IP live</span>
-    <span>domain pending approval</span>
-    <span>HTTPS after DNS activation</span>
+    <span>official domain active</span>
+    <span>HTTPS with Let's Encrypt</span>
+    <span>Google Workspace email active</span>
   </div>
 </header>
 
 <section>
   <h2>Overview</h2>
-  <p>This project is a practical production deployment for Garmoniya Center. The website supports Russian, Uzbek Latin, and English, and is prepared for the official domain <code>garmoniya-center.uz</code> once approval and DNS activation are complete.</p>
+  <p>This project is a practical production deployment for Garmoniya Center. The website supports Russian, Uzbek Latin, and English, and is live at <a href="https://garmoniya-center.uz">garmoniya-center.uz</a>.</p>
   <p>My work focused on building the site and setting up a simple, understandable deployment path: Docker multi-stage build, Docker Compose on the server, host Nginx reverse proxy, and a manual deployment script.</p>
 </section>
 
@@ -74,6 +74,7 @@
     <li><span>runtime</span><strong>Docker multi-stage build · Docker Compose</strong></li>
     <li><span>routing</span><strong>Host Nginx reverse proxy</strong></li>
     <li><span>repository</span><strong>GitLab · CI/CD validation</strong></li>
+    <li><span>email</span><strong>Google Workspace · info@garmoniya-center.uz</strong></li>
   </ul>
 </section>
 
@@ -85,6 +86,7 @@
     <li>Enabled Fail2Ban for SSH protection.</li>
     <li>Used SSH key authentication and disabled password login.</li>
     <li>Configured host Nginx as the reverse proxy in front of the Docker Compose service.</li>
+    <li>Enabled HTTPS for the official domain with Let's Encrypt.</li>
   </ul>
 </section>
 
@@ -95,7 +97,16 @@
 
 <section>
   <h2>Current Status</h2>
-  <p>The public IP deployment is live. The official domain <code>garmoniya-center.uz</code> is pending approval; HTTPS and official email will be configured after DNS activation.</p>
+  <p>The official domain <a href="https://garmoniya-center.uz">garmoniya-center.uz</a> is active with HTTPS. The official email address <a href="mailto:info@garmoniya-center.uz">info@garmoniya-center.uz</a> is active through Google Workspace.</p>
+</section>
+
+<section>
+  <h2>Planned Next</h2>
+  <ul class="case-list">
+    <li>Admin panel for content updates.</li>
+    <li>Telegram/contact-form request system.</li>
+    <li>Mobile app for a later phase.</li>
+  </ul>
 </section>
 
 <section>

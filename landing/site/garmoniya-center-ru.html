@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Garmoniya Center NGO Website · Эрбол Султанбаев</title>
-  <meta name="description" content="Кейс о многоязычном сайте ННО на Astro, TypeScript, Docker, Nginx и Ubuntu VPS в UZTELECOM Cloud.">
+  <meta name="description" content="Кейс о работающем многоязычном сайте ННО на Astro, TypeScript, Docker, Nginx и Ubuntu VPS в UZTELECOM Cloud.">
   <meta property="og:title" content="Garmoniya Center NGO Website">
-  <meta property="og:description" content="Многоязычный сайт ННО с Docker Compose, host Nginx reverse proxy, UFW, Fail2Ban и SSH только по ключу.">
+  <meta property="og:description" content="Работающий многоязычный сайт ННО с Docker Compose, host Nginx reverse proxy, UFW, Fail2Ban и SSH только по ключу.">
   <meta property="og:image" content="https://erbsultan.uz/me.jpg">
   <meta property="og:url" content="https://erbsultan.uz/garmoniya-center-ru.html">
   <meta property="og:type" content="article">
@@ -53,15 +53,15 @@
   <h1>Garmoniya Center NGO Website</h1>
   <p class="lede">Многоязычный официальный сайт для ННО, собранный на Astro и TypeScript и размещённый на production-сервере Ubuntu в UZTELECOM Cloud.</p>
   <div class="case-status" aria-label="Статус проекта">
-    <span>public IP live</span>
-    <span>домен на утверждении</span>
-    <span>HTTPS после DNS</span>
+    <span>официальный домен активен</span>
+    <span>HTTPS с Let's Encrypt</span>
+    <span>Google Workspace email активен</span>
   </div>
 </header>
 
 <section>
   <h2>Обзор</h2>
-  <p>Это практический production-деплой для Garmoniya Center. Сайт поддерживает русский, узбекский на латинице и английский, а также подготовлен к официальному домену <code>garmoniya-center.uz</code> после утверждения и активации DNS.</p>
+  <p>Это практический production-деплой для Garmoniya Center. Сайт поддерживает русский, узбекский на латинице и английский и уже работает на <a href="https://garmoniya-center.uz">garmoniya-center.uz</a>.</p>
   <p>Моя часть работы: сам сайт и понятный путь деплоя — Docker multi-stage build, Docker Compose на сервере, host Nginx reverse proxy и ручной deployment script.</p>
 </section>
 
@@ -74,6 +74,7 @@
     <li><span>runtime</span><strong>Docker multi-stage build · Docker Compose</strong></li>
     <li><span>routing</span><strong>Host Nginx reverse proxy</strong></li>
     <li><span>repository</span><strong>GitLab · CI/CD validation</strong></li>
+    <li><span>email</span><strong>Google Workspace · info@garmoniya-center.uz</strong></li>
   </ul>
 </section>
 
@@ -85,6 +86,7 @@
     <li>Включил Fail2Ban для защиты SSH.</li>
     <li>Настроил вход по SSH-ключу и отключил password login.</li>
     <li>Настроил host Nginx как reverse proxy перед сервисом в Docker Compose.</li>
+    <li>Включил HTTPS для официального домена через Let's Encrypt.</li>
   </ul>
 </section>
 
@@ -95,7 +97,16 @@
 
 <section>
   <h2>Текущий статус</h2>
-  <p>Деплой по публичному IP уже работает. Официальный домен <code>garmoniya-center.uz</code> ожидает утверждения; HTTPS и официальная почта будут настроены после активации DNS.</p>
+  <p>Официальный домен <a href="https://garmoniya-center.uz">garmoniya-center.uz</a> активен и работает через HTTPS. Официальная почта <a href="mailto:info@garmoniya-center.uz">info@garmoniya-center.uz</a> активна через Google Workspace.</p>
+</section>
+
+<section>
+  <h2>Планируется</h2>
+  <ul class="case-list">
+    <li>Admin panel для обновления контента.</li>
+    <li>Telegram/contact-form request system.</li>
+    <li>Mobile app на следующем этапе.</li>
+  </ul>
 </section>
 
 <section>
